@@ -1,0 +1,189 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+[data-nextjs-toast] {
+  display: none !important;
+}
+
+:root {
+  --primary: #28a745;
+  --primary-light: #4ade80;
+  --primary-dark: #15803d;
+  --background: #e6fae6;
+  --background-light: #f0fff0;
+  --foreground: #0f172a;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+@layer base {
+  :root {
+    --background: 145 83% 94%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 145 83% 97%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 142.1 70.6% 45.3%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 142.1 76.2% 96.2%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 142.1 76.2% 96.2%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 142.1 70.6% 45.3%;
+    --radius: 0.5rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+.eco-background {
+  position: relative;
+  overflow: hidden;
+}
+
+.eco-background::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 40%;
+  height: 60%;
+  background-color: var(--primary);
+  border-radius: 0 0 0 100%;
+  z-index: 0;
+}
+
+.eco-background::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 60%;
+  height: 40%;
+  background-color: var(--primary);
+  border-radius: 0 100% 0 0;
+  z-index: 0;
+}
+
+.form-container {
+  background-color: rgba(230, 250, 230, 0.9);
+  border-radius: 0.75rem;
+  padding: 2.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  position: relative;
+  z-index: 10;
+  max-width: 500px;
+  width: 100%;
+  margin: 2rem auto;
+}
+
+.circular-progress {
+  position: relative;
+  width: 140px;
+  height: 140px;
+}
+
+.circular-progress svg circle {
+  fill: none;
+  stroke-width: 8;
+  stroke-linecap: round;
+  transform: rotate(-90deg);
+  transform-origin: center;
+}
+
+.circular-progress .progress-background {
+  stroke: #c1e7c1;
+}
+
+.circular-progress .progress-value {
+  stroke: var(--primary);
+  transition: stroke-dashoffset 0.5s ease-in-out;
+}
+
+.progress-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.5rem;
+  color: var(--primary);
+  font-weight: bold;
+}
+
+.activity-item {
+  background-color: rgba(255, 255, 255, 0.4);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-bottom: 0.75rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.activity-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background-color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 1rem;
+}
+
+.calendar-container {
+  background-color: rgba(255, 255, 255, 0.4);
+  border-radius: 0.75rem;
+  padding: 1rem;
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.25rem;
+}
+
+.calendar-day {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+
+.calendar-day:hover {
+  background-color: rgba(255, 255, 255, 0.6);
+}
+
+.calendar-day.active {
+  background-color: var(--primary);
+  color: white;
+}
+
