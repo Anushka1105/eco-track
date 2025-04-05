@@ -36,14 +36,9 @@ export default function RegisterPage() {
 
     try {
       const success = await register(name, email, password)
-
-      if (success) {
-        router.push("/dashboard")
-      } else {
-        setError("Failed to create account")
-      }
+      router.push("/dashboard")
     } catch (err) {
-      setError("An error occurred. Please try again.")
+      setError(err instanceof Error ? err.message : "Registration failed")
     }
   }
 
@@ -93,12 +88,13 @@ export default function RegisterPage() {
           </div>
 
           <div>
-            <Label htmlFor="password">Password</Label>
+            <Label htmlFor="password">Password (min 6 characters)</Label>
             <Input
               id="password"
               name="password"
               type="password"
               required
+              minLength={6}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="mt-1"

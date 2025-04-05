@@ -1,118 +1,61 @@
 "use client"
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Car, Home, Zap } from "lucide-react"
+import { CarbonEntry } from "../lib/carbon-storage"
+import { Car, Home, Zap, Utensils, Battery } from "lucide-react"
 
-interface Activity {
-  id: string
-  type: string
-  time: string
-  duration: number
-  carbonAmount: number
+interface ActivityListProps {
+  activities: CarbonEntry[]
 }
 
-export function ActivityList() {
-  const [activities, setActivities] = useState<Activity[]>([
-    
-  ])
-
-  const [newActivity, setNewActivity] = useState({
-    type: "",
-    time: "",
-    duration: "",
-  })
-
-  const getIcon = (type: string) => {
-    return <Zap className="h-5 w-5 text-white" />
-  }
-
-  const getLabel = (type: string) => {
-    return type
-  }
-
-  const handleAddActivity = () => {
-    if (!newActivity.time || !newActivity.duration) return
-
-    // Calculate carbon based on type and duration (simplified)
-    let carbonAmount = 0
-
-    carbonAmount = Number(newActivity.duration) * 0.27
-
-    const newActivityItem: Activity = {
-      id: Date.now().toString(),
-      type: newActivity.type as string,
-      time: newActivity.time,
-      duration: Number(newActivity.duration),
-      carbonAmount: Number(carbonAmount.toFixed(2)),
+export function ActivityList({ activities }: ActivityListProps) {
+  const getActivityIcon = (type: string) => {
+    switch(type) {
+      case 'energy': return <Zap className="h-5 w-5 text-white" />
+      case 'carTravel': return <Car className="h-5 w-5 text-white" />
+      case 'food': return <Utensils className="h-5 w-5 text-white" />
+      case 'electricity': return <Battery className="h-5 w-5 text-white" />
+      default: return <Home className="h-5 w-5 text-white" />
     }
+  }
 
-    setActivities([...activities, newActivityItem])
-    setNewActivity({
-      type: "",
-      time: "",
-      duration: "",
-    })
+  const getActivityLabel = (type: string) => {
+    return type.charAt(0).toUpperCase() + type.slice(1).replace(/([A-Z])/g, ' $1')
   }
 
   return (
-    <div className="space-y-6">
-      <div className="bg-background/80 rounded-lg p-4">
-        <h3 className="text-xl font-semibold mb-4">Recent Usage</h3>
-        <div className="space-y-3">
-          {activities.map((activity) => (
-            <div key={activity.id} className="flex items-center justify-between p-3 bg-background/50 rounded-lg">
-              <div className="flex items-center">
-                <div className="h-10 w-10 rounded-full bg-primary flex items-center justify-center mr-3">
-                  {getIcon(activity.type)}
-                </div>
-                <div>
-                  <p className="font-medium">{getLabel(activity.type)}</p>
-                  <p className="text-sm text-muted-foreground">
-                    At {activity.time} for {activity.duration} minutes
-                  </p>
-                </div>
+    <div className="bg-background/80 rounded-lg p-4">
+      <h3 className="text-xl font-semibold mb-4">Recent Usage Breakdown</h3>
+      <div className="space-y-4">
+        {activities.slice(0, 5).map((entry) => (
+          <div key={entry.timestamp} className="space-y-2">
+            <div className="text-sm text-muted-foreground">
+              {new Date(entry.timestamp).toLocaleDateString()}
+            </div>
+            <div className="bg-background/50 rounded-lg p-3">
+              <div className="flex justify-between mb-2">
+                <span className="font-medium">Total Footprint</span>
+                <span className="font-medium">{entry.footprint.toFixed(2)} kg</span>
               </div>
-              <div className="text-right">
-                <p className="font-medium">{activity.carbonAmount} kg</p>
-                <Button variant="link" className="text-primary p-0 h-auto">
-                  edit
-                </Button>
+              
+              <div className="space-y-2">
+                {Object.entries(entry.activities).map(([type, value]) => (
+                  <div key={type} className="flex items-center justify-between">
+                    <div className="flex items-center">
+                      <div className="h-8 w-8 rounded-full bg-primary/80 flex items-center justify-center mr-2">
+                        {getActivityIcon(type)}
+                      </div>
+                      <span>{getActivityLabel(type)}</span>
+                    </div>
+                    <span className="text-muted-foreground">
+                      {value.toFixed(2)} kg
+                    </span>
+                  </div>
+                ))}
               </div>
             </div>
-          ))}
-        </div>
-      </div>
-
-      <div className="bg-background/80 rounded-lg p-4">
-        <div className="space-y-3">
-          <Input
-            placeholder="Use...."
-            value={newActivity.type}
-            onChange={(e) => setNewActivity({ ...newActivity, type: e.target.value })}
-            className="mb-2"
-          />
-          <Input
-            placeholder="Time..."
-            type="time"
-            value={newActivity.time}
-            onChange={(e) => setNewActivity({ ...newActivity, time: e.target.value })}
-            className="mb-2"
-          />
-          <Input
-            placeholder="Duration..."
-            type="number"
-            value={newActivity.duration}
-            onChange={(e) => setNewActivity({ ...newActivity, duration: e.target.value })}
-            className="mb-2"
-          />
-          <Button onClick={handleAddActivity} className="w-full" variant="outline">
-            ADD
-          </Button>
-        </div>
+          </div>
+        ))}
       </div>
     </div>
   )
 }
-
