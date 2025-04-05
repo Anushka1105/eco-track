@@ -36,19 +36,14 @@ export default function RegisterPage() {
 
     try {
       const success = await register(name, email, password)
-
-      if (success) {
-        router.push("/dashboard")
-      } else {
-        setError("Failed to create account")
-      }
+      router.push("/dashboard")
     } catch (err) {
-      setError("An error occurred. Please try again.")
+      setError(err instanceof Error ? err.message : "Registration failed")
     }
   }
 
   return (
-    <div className="h-screen relative w-screen overflow-hidden">
+    <div className="min-h-screen eco-background flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="form-container max-w-md w-full">
         <div className="flex flex-col items-center mb-8">
           <Logo />
@@ -84,12 +79,13 @@ export default function RegisterPage() {
           </div>
 
           <div>
-            <Label htmlFor="password">Password</Label>
+            <Label htmlFor="password">Password (min 6 characters)</Label>
             <Input
               id="password"
               name="password"
               type="password"
               required
+              minLength={6}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="mt-1"
@@ -115,8 +111,11 @@ export default function RegisterPage() {
 
           {error && <p className="text-destructive text-sm">{error}</p>}
 
-          <Button type="submit" className="w-full">
-            Sign in
+          <Button 
+            type="submit"
+            className="w-full"
+          >
+            Create Account
           </Button>
 
           <div className="text-center text-sm">or</div>
