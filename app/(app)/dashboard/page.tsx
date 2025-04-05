@@ -1,24 +1,62 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
-import { Logo } from "@/components/logo"
-import { Button } from "@/components/ui/button"
-import { CircularProgress } from "@/components/circular-progress"
-import { ActivityList } from "@/components/activity-list"
-import { useAuth } from "@/lib/auth"
+import { Logo } from "../../../components/logo"
+import { Button } from "../../../components/ui/button"
+import { CircularProgress } from "../../../components/circular-progress"
+import { ActivityList } from "../../../components/activity-list"
+import { useAuth } from "../../../lib/auth"
+import { getRecentCarbonData, CarbonEntry } from "../../../lib/carbon-storage"
 import { ArrowRight, Home, Menu, User } from "lucide-react"
 
 export default function DashboardPage() {
   const { user, logout } = useAuth()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
-  // Mock carbon footprint data
-  const footprintData = {
-    today: 63,
-    thisMonth: 63,
-    lastMonth: 63,
-  }
+  const [footprintData, setFootprintData] = useState({
+    today: 0,
+    thisMonth: 0,
+    lastMonth: 0,
+  })
+  const [recentActivities, setRecentActivities] = useState<CarbonEntry[]>([])
+
+  useEffect(() => {
+    const recentData = getRecentCarbonData()
+    if (recentData.length > 0) {
+      // Calculate today's footprint (most recent entry)
+      const todayFootprint = recentData[0].footprint
+      
+      // Calculate this month's footprint (sum of last 30 days)
+      const thisMonthFootprint = recentData
+        .filter((entry: CarbonEntry) => {
+          const entryDate = new Date(entry.timestamp)
+          const now = new Date()
+          return entryDate.getMonth() === now.getMonth() && 
+                 entryDate.getFullYear() === now.getFullYear()
+        })
+        .reduce((sum: number, entry: CarbonEntry) => sum + entry.footprint, 0)
+      
+      // Calculate last month's footprint (sum of previous month)
+      const lastMonthFootprint = recentData
+        .filter((entry: CarbonEntry) => {
+          const entryDate = new Date(entry.timestamp)
+          const now = new Date()
+          const lastMonth = now.getMonth() === 0 ? 11 : now.getMonth() - 1
+          const year = now.getMonth() === 0 ? now.getFullYear() - 1 : now.getFullYear()
+          return entryDate.getMonth() === lastMonth && 
+                 entryDate.getFullYear() === year
+        })
+        .reduce((sum: number, entry: CarbonEntry) => sum + entry.footprint, 0)
+
+      setFootprintData({
+        today: todayFootprint,
+        thisMonth: thisMonthFootprint,
+        lastMonth: lastMonthFootprint
+      })
+      setRecentActivities(recentData)
+    }
+  }, [])
 
   return (
     <div className="min-h-screen bg-background">
@@ -64,7 +102,11 @@ export default function DashboardPage() {
 
           <div className="flex flex-col items-center justify-center bg-white rounded-lg p-4 shadow-sm">
             <h2 className="text-xl font-medium mb-4">THIS MONTH</h2>
-            <CircularProgress value={footprintData.thisMonth} max={100} />
+            <CircularProgress 
+              value={footprintData.thisMonth} 
+              previousValue={footprintData.lastMonth}
+              max={100} 
+            />
           </div>
 
           <div className="flex flex-col items-center justify-center bg-white rounded-lg p-4 shadow-sm">
@@ -74,7 +116,7 @@ export default function DashboardPage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <ActivityList />
+          <ActivityList activities={recentActivities} />
 
           <div className="bg-white rounded-lg p-6 shadow-sm">
             <h3 className="text-xl font-semibold mb-4">Quick Links</h3>
@@ -111,4 +153,3 @@ export default function DashboardPage() {
     </div>
   )
 }
-
