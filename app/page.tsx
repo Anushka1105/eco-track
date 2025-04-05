@@ -15,6 +15,22 @@ export default function HomePage() {
       <svg className="absolute bottom-[-10%] left-[-5%] -z-10 w-[1000px] h-[500px]" width="1118" height="408" viewBox="0 0 1118 408" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M413 309.143C283 261.234 367 -136.947 -21 51.1435V417.143L1117 433.143C1117 433.143 1015 239.053 887 177.143C771 95.2336 543 357.053 413 309.143Z" fill="#3CCB4D" stroke="#3CCB4D" />
       </svg>
+      <img src="/FLOWER.png" alt="" className="absolute bottom-0 left-0 w-[570px] object-cover h-[330px] pr-[300px]" />
+      <img src="/FLOWER2.png" alt="" className="absolute bottom-0 left-12 w-[570px] object-cover h-[330px] pr-[300px]" />
+      <img src="/TREE.png" alt="" className='absolute bottom-0 right-10 w-[230px] 
+            object-cover h-[400px] pr-[5px]'/>
+      <img src="/TREE2.png" alt="" className='absolute bottom-0 right-0 w-[250px] 
+            object-cover h-[400px] pr-[2px]'/>
+            <img src="/LEAF.png" alt="" className='absolute bottom-[-15px] right-80 w-[300px] object-contain h-[100px] pr-[90px]' />
+            <img src="/LEAF4.png" alt="" className='absolute bottom-[-10px] right-80 w-[300px] object-contain h-[100px] pr-[180px]' />
+            <img src="/LEAF4.png" alt="" className='absolute bottom-[-10px] right-80 w-[350px] object-contain h-[150px] pr-[250px]' />
+            <img src="/LEAF4.png" alt="" className='absolute bottom-[-10px] right-80 w-[450px] object-contain h-[200px] left-[100px]' />
+            <img src="/LEAF4.png" alt="" className='absolute bottom-[-10px] right-80 w-[200px] object-contain h-[100px] left-[180px]' />
+
+
+
+
+
 
 
 

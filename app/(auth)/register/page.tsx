@@ -49,14 +49,23 @@ export default function RegisterPage() {
 
   return (
     <div className="h-screen relative w-screen overflow-hidden">
-      <div className="form-container max-w-md w-full">
+      <div className="form-container max-w-md w-full mx-auto px-4 py-8">
         <div className="flex flex-col items-center mb-8">
           <Logo />
         </div>
 
+        <svg className="absolute top-[-5%] right-[-100%] z-[-100] w-[1000px] h-[500px]" width="777" height="405" viewBox="0 0 777 405" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M325 148C209 128.5 31.5 181 0.999939 -12L777 0V404C777 404 727 274 669 240C611 206 475 306 441 240C407 174 441 167.5 325 148Z" fill="#3CCB4D" stroke="#3CCB4D" />
+        </svg>
+
+        <svg className="absolute bottom-[5%] right-[10%] z-[-40] w-[1000px] h-[500px]" width="1118" height="408" viewBox="0 0 1118 408" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M413 309.143C283 261.234 367 -136.947 -21 51.1435V417.143L1117 433.143C1117 433.143 1015 239.053 887 177.143C771 95.2336 543 357.053 413 309.143Z" fill="#3CCB4D" stroke="#3CCB4D" />
+        </svg>
+
         <h1 className="text-3xl font-bold text-center text-primary mb-6">Create An Account</h1>
 
-        <form className="space-y-6" onSubmit={handleSubmit}>
+
+        <form className="space-y-6 " onSubmit={handleSubmit}>
           <div>
             <Label htmlFor="name">Your Name</Label>
             <Input
@@ -116,7 +125,7 @@ export default function RegisterPage() {
           {error && <p className="text-destructive text-sm">{error}</p>}
 
           <Button type="submit" className="w-full">
-            Sign in
+            Sign up
           </Button>
 
           <div className="text-center text-sm">or</div>
