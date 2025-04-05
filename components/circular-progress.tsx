@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils"
 interface CircularProgressProps {
   value: number
   max: number
+  previousValue?: number
   size?: number
   strokeWidth?: number
   className?: string
@@ -12,6 +13,7 @@ interface CircularProgressProps {
 export function CircularProgress({
   value,
   max,
+  previousValue,
   size = 120,
   strokeWidth = 10,
   className,
@@ -46,8 +48,21 @@ export function CircularProgress({
           strokeLinecap="round"
         />
       </svg>
-      <div className="absolute inset-0 flex items-center justify-center">
-        {label ? label : <span className="text-xl font-bold text-primary">{value} kg</span>}
+      <div className="absolute inset-0 flex flex-col items-center justify-center">
+        {label ? (
+          <span className="text-lg font-medium">{label}</span>
+        ) : (
+          <>
+            <span className="text-xl font-bold text-primary">{value} kg</span>
+            {previousValue !== undefined && (
+              <span className={`text-xs mt-1 ${
+                value < previousValue ? 'text-green-500' : 'text-red-500'
+              }`}>
+                {value < previousValue ? '↓' : '↑'} {Math.abs(value - previousValue).toFixed(1)} kg
+              </span>
+            )}
+          </>
+        )}
       </div>
     </div>
   )
