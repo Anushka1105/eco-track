@@ -60,7 +60,7 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <header className="bg-green-50 py-4 px-4">
+      <header className="bg-green-50 py-2 px-2 flex justify-between items-center">
         <div className="container mx-auto flex justify-between items-center">
           <Logo />
 

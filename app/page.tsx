@@ -44,7 +44,7 @@ export default function HomePage() {
           </p>
 
           <Link href="/register">
-            <Button size="lg" className="rounded-full border-2 hover:bg-green-400 transition-all duration-300 px-8 py-6 text-lg">
+            <Button size="lg" className="rounded-full border-2 bg-green-800 text-white transition-all duration-300 px-8 py-6 text-lg hover:bg-green-600 ">
               Get Started <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
           </Link>

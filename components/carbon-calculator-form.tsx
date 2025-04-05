@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -16,22 +16,59 @@ export function CarbonCalculatorForm({ onCalculate }: CalculatorFormProps) {
   const [carTravel, setCarTravel] = useState("")
   const [food, setFood] = useState("")
   const [electricity, setElectricity] = useState("")
+
+  // Load recent inputs on component mount
+  useEffect(() => {
+    const loadRecent = async () => {
+      const { getRecentInputs } = await import("../lib/carbon-storage")
+      const recent = getRecentInputs()
+      if (recent) {
+        setEnergy(recent.energy)
+        setCarTravel(recent.carTravel)
+        setFood(recent.food)
+        setElectricity(recent.electricity)
+      }
+    }
+    loadRecent()
+  }, [])
+
+  // Save inputs when they change
+  useEffect(() => {
+    const saveInputs = async () => {
+      const { saveRecentInputs } = await import("../lib/carbon-storage")
+      saveRecentInputs({
+        energy,
+        carTravel,
+        food,
+        electricity
+      })
+    }
+    saveInputs()
+  }, [energy, carTravel, food, electricity])
   const [footprint, setFootprint] = useState<number | null>(null)
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    // Simple calculation for demonstration purposes
-    // In a real app, this would be more sophisticated
     const energyValue = Number.parseFloat(energy) || 0
     const carValue = Number.parseFloat(carTravel) || 0
     const foodValue = Number.parseFloat(food) || 0
     const electricityValue = Number.parseFloat(electricity) || 0
 
-    // Formula: Different weights for each category (simplified)
     const result = energyValue * 0.5 + carValue * 0.15 + foodValue * 0.2 + electricityValue * 0.3
-
     setFootprint(result)
+
+    // Save to storage
+    const today = new Date()
+    const activities = {
+      energy: energyValue,
+      carTravel: carValue,
+      food: foodValue,
+      electricity: electricityValue
+    }
+    
+    const { saveCarbonData } = await import("../lib/carbon-storage")
+    saveCarbonData(today, result, activities)
 
     if (onCalculate) {
       onCalculate(result)
@@ -62,7 +99,7 @@ export function CarbonCalculatorForm({ onCalculate }: CalculatorFormProps) {
           <div className="space-y-2">
             <Label htmlFor="car">Car Travel (Km):</Label>
             <Input
-              id="car"
+              id="travel"
               type="number"
               placeholder="Enter your car travel distance"
               value={carTravel}
@@ -92,7 +129,7 @@ export function CarbonCalculatorForm({ onCalculate }: CalculatorFormProps) {
             />
           </div>
 
-          <Button type="submit" className="w-full bg-primary hover:bg-primary/90">
+          <Button type="submit" className="w-full bg-black text-white hover:bg-white hover:text-black hover:border-2 hover:border-black transition duration-300 ease-in-out ">
             Calculate Footprint
           </Button>
         </div>
@@ -108,4 +145,3 @@ export function CarbonCalculatorForm({ onCalculate }: CalculatorFormProps) {
     </div>
   )
 }
-
